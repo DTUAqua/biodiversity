@@ -45,16 +45,42 @@ coef.biodiv <- function(object, ...){
 ##' @details ...
 ##' @export
 residuals.biodiv<-function(object, ...){
-  cat("One-observation-ahead residuals. Total number of observations: ", nobs(object), "\n")
+  cat("One-observation-ahead residuals. Total number of observations: ", nrow(object$data), "\n")
   ## ooa-residuals
   res <- oneStepPredict(object$obj,
                         method = "oneStepGeneric",
                         discrete = TRUE, 
                         observation.name = "nsp", 
-                        data.term.indicator = "keep", discreteSupport = 2*max(object$data$nsp),...)
+                        data.term.indicator = "keep", discreteSupport = 0:(2*max(object$data$nsp)),...)
   cat("One-observation-ahead residuals. Done\n")  
-  ret <- cbind(object$data, res)
+  ret <- cbind(object$data, res, mu=object$rep$mu)
   class(ret)<-"biodivres"
   ret
 }
+
+
+##' Plot biodiv object 
+##' @method plot biodiv
+##' @param  x object returned from biodiv 
+##' @param  ... extra arguments 
+##' @importFrom graphics abline
+##' @details ...
+##' @export
+plot.biodiv<-function(x, ...){
+  plot(x$rep$mu, x$data$nsp, xlab="Predicted number of species", ylab="Observed number of species")
+  abline(0,1)
+}
+
+##' Plot biodivres object 
+##' @method plot biodivres
+##' @param  x residuals from a biodiv model 
+##' @param  ... extra arguments 
+##' @importFrom graphics abline
+##' @details ...
+##' @export
+plot.biodivres<-function(x, ...){
+  plot(x$mu, x$residual, xlab="Predicted", ylab="One observation ahead residual")
+  abline(h=0)
+}
+
 
