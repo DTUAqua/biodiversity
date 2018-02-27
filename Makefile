@@ -15,12 +15,12 @@ all:
 	make pdf
 
 doc-update: $(PACKAGE)/R/*.R
-	echo "library(roxygen2);roxygenize(\"$(PACKAGE)\",roclets = c(\"rd\"))" | $(R) --slave
+	echo "library(roxygen2);roxygenize(\"$(PACKAGE)\")" | $(R) --slave
 	@touch doc-update
 
 namespace-update :: $(PACKAGE)/NAMESPACE
 $(PACKAGE)/NAMESPACE: $(PACKAGE)/R/*.R
-	echo "library(roxygen2);roxygenize(\"$(PACKAGE)\",roclets = c(\"namespace\"))" | $(R) --slave
+	echo "library(roxygen2);roxygenize(\"$(PACKAGE)\")" | $(R) --slave
 
 build-package: $(TARBALL)
 $(TARBALL): $(PACKAGE)/NAMESPACE
