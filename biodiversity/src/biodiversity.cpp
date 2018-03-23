@@ -4,19 +4,21 @@ template<class Type>
 Type objective_function<Type>::operator() ()
 {
   DATA_INTEGER(code)
+  DATA_VECTOR(lat);
+  DATA_VECTOR(lon);
+  DATA_VECTOR(nsp);
+  DATA_VECTOR_INDICATOR(keep, nsp);
+  DATA_VECTOR(abund);
+  DATA_VECTOR(asampl);
+  DATA_VECTOR(temp);
+  DATA_IVECTOR(cat);
+  DATA_VECTOR(npp);
+  DATA_VECTOR(mesh);  
+  DATA_VECTOR(siz);
+  DATA_VECTOR(depth);
+  DATA_VECTOR(density);
   Type nll=0;
-  if(code==1){
-    DATA_VECTOR(lat);
-    DATA_VECTOR(nsp);
-    DATA_VECTOR_INDICATOR(keep, nsp);
-    DATA_VECTOR(abund);
-    DATA_VECTOR(logsiz);
-    DATA_VECTOR(asampl);
-    DATA_VECTOR(temp);
-    DATA_IVECTOR(cat);
-    DATA_VECTOR(npp);
-    DATA_VECTOR(mesh);  
-  
+  if(code==1){  
     PARAMETER_VECTOR(b5);
     PARAMETER(b0);
     PARAMETER(b1);
@@ -24,7 +26,7 @@ Type objective_function<Type>::operator() ()
     PARAMETER(logb3);
     PARAMETER(b4);
     PARAMETER(logk);
-    vector<Type> a=exp(b0+b1*logsiz*logsiz);
+    vector<Type> a=exp(b0+b1*siz*siz);
     vector<Type> nu=exp(-b2/temp);
     Type b3=exp(logb3);
     Type k=exp(logk);
@@ -62,8 +64,6 @@ Type objective_function<Type>::operator() ()
     REPORT(nll);
   }
   if(code==2){
-    DATA_VECTOR(nsp);
-    DATA_VECTOR_INDICATOR(keep, nsp);
     PARAMETER_VECTOR(logb5);
     vector<Type> b5=exp(logb5);
     Type k=37.24;
@@ -82,19 +82,7 @@ Type objective_function<Type>::operator() ()
     REPORT(nll);
     REPORT(logL);
   }
-  if(code==3){
-    DATA_VECTOR(lat);
-    DATA_VECTOR(lon);
-    DATA_VECTOR(nsp);
-    DATA_VECTOR_INDICATOR(keep, nsp);
-    DATA_VECTOR(abund);
-    DATA_VECTOR(siz);
-    DATA_VECTOR(asampl);
-    DATA_VECTOR(depth);
-    DATA_IVECTOR(cat);
-    DATA_VECTOR(npp);
-    DATA_VECTOR(mesh);  
-    
+  if(code==3){    
     PARAMETER(loga7);
     PARAMETER_VECTOR(b5);
     PARAMETER(b0);
@@ -136,17 +124,7 @@ Type objective_function<Type>::operator() ()
     REPORT(nll);
     REPORT(logL);
   }
-  if(code==4){
-    DATA_VECTOR(nsp);
-    DATA_VECTOR_INDICATOR(keep, nsp);
-    DATA_VECTOR(density);
-    DATA_VECTOR(siz);
-    DATA_VECTOR(asampl);
-    DATA_VECTOR(temp);
-    DATA_IVECTOR(cat);
-    DATA_VECTOR(npp);
-    DATA_VECTOR(mesh);  
-    
+  if(code==4){    
     PARAMETER(loga7);
     PARAMETER_VECTOR(b5);
     PARAMETER(logb1);

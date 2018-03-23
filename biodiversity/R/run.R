@@ -16,42 +16,18 @@ biodiv <- function(data, conf, run=TRUE, ...){
   dat<-data[(data$density*data$asurv)>1.0e-6,]
   data <- list()
   data$code <- conf
-  if(data$code==1){
-    data$lat <- dat$lat
-    data$nsp <- dat$nsp
-    data$abund <- dat$density*dat$asurv
-    data$logsiz <- dat$siz
-    data$asampl <- dat$aswept
-    data$mesh <- dat$mesh
-    data$temp <- (dat$sst+273.15)*8.62/100000
-    data$npp <- dat$npp
-    data$cat <- as.integer(dat$mlgr)-1
-  }
-  if(data$code==2){
-    data$nsp <- dat$nsp
-  }
-  if(data$code==3){
-    data$lat <- dat$lat
-    data$lon <- dat$lon+100
-    data$nsp <- dat$nsp
-    data$abund <- dat$density*dat$asurv
-    data$siz <- dat$siz
-    data$asampl <- dat$aswept
-    data$mesh <- dat$mesh
-    data$depth <- dat$depth
-    data$npp <- dat$npp
-    data$cat <- as.integer(dat$mlgr)-1
-  }
-  if(data$code==4){
-    data$nsp <- dat$nsp
-    data$density <- dat$density
-    data$siz <- dat$siz
-    data$asampl <- dat$aswept
-    data$mesh <- dat$mesh
-    data$temp <- (dat$sst+273.15)*8.62/100000
-    data$npp <- dat$npp
-    data$cat <- as.integer(dat$mlgr)-1
-  }
+  data$lat <- dat$lat
+  data$lon <- dat$lon+100  
+  data$nsp <- dat$nsp
+  data$abund <- dat$density*dat$asurv
+  data$asampl <- dat$aswept
+  data$temp <- (dat$sst+273.15)*8.62/100000
+  data$cat <- as.integer(dat$mlgr)-1
+  data$npp <- dat$npp  
+  data$mesh <- dat$mesh
+  data$siz <- dat$siz
+  data$depth <- dat$depth
+  data$density <- dat$density  
 
   param <- list()
   if(data$code==1){
