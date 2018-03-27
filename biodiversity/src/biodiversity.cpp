@@ -21,6 +21,24 @@ Type objective_function<Type>::operator() ()
   int nobs=nsp.size();
   vector<Type> mu(nobs);
   Type k;
+  if(code==(-2)){
+    PARAMETER(loga7);
+    PARAMETER(logk);
+    Type a7=exp(loga7);
+    k=exp(logk);  
+    for(int i=0; i<nobs; ++i){
+      mu(i)=a7;
+    }
+  }
+  if(code==(-1)){
+    PARAMETER_VECTOR(logb5);
+    PARAMETER(logk);
+    vector<Type> b5=exp(logb5);
+    k=exp(logk);
+    for(int i=0; i<nobs; ++i){
+      mu(i)=b5(i)+Type(1.0e-12);
+    }
+  }
   if(code==1){  
     PARAMETER_VECTOR(b5);
     PARAMETER(b0);
@@ -41,13 +59,30 @@ Type objective_function<Type>::operator() ()
     }  
   }
   if(code==2){
-    PARAMETER_VECTOR(logb5);
-    vector<Type> b5=exp(logb5);
-    k=37.24;
+    PARAMETER(loga7);
+    PARAMETER_VECTOR(b8);
+    PARAMETER(logb1);
+    PARAMETER(logb2);
+    PARAMETER(logb3);
+    PARAMETER(logb5);
+    PARAMETER(logb6);
+    PARAMETER(logb7);
+    PARAMETER(logk);
+    Type b1=exp(logb1);
+    Type b2=exp(logb2);
+    Type b3=-exp(logb3);
+    Type b5=exp(logb5);
+    Type b6=exp(logb6);
+    Type b7=exp(logb7);
+    k=exp(logk);
+    vector<Type> a=exp(loga7-b7*siz*siz);
+    vector<Type> nu=exp(-b1/temp); 
     for(int i=0; i<nobs; ++i){
-      mu(i)=b5(i)+Type(1.0e-12);
+      mu(i)=a(i)*nu(i)*
+      pow(npp(i),b2)*pow(depth(i),b3)*pow(asampl(i),b5)*pow(density(i),b6)*
+	exp(b8(cat(i))*log(mesh(i)))+Type(1.0e-12);
     }
-  }
+  } 
   if(code==3){    
     PARAMETER(loga7);
     PARAMETER_VECTOR(b5);

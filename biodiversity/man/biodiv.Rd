@@ -4,12 +4,14 @@
 \alias{biodiv}
 \title{Fit biodiversity model}
 \usage{
-biodiv(data, conf, run = TRUE, ...)
+biodiv(data, conf, fixK = NULL, run = TRUE, ...)
 }
 \arguments{
 \item{data}{A data set in same format as the species data set supplied with this package}
 
-\item{conf}{A code identifying the model configuration (now only one is possible)}
+\item{conf}{A code identifying the model configuration (-2=constant model, -1=saturated model, 1=Neutral, 2=Best, 3=Latitude, and 4=Metabolic)}
+
+\item{fixK}{optionally a value used to fix the k parameter.}
 
 \item{run}{if FALSE return AD object without running the optimization}
 

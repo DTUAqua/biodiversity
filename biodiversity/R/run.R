@@ -1,6 +1,7 @@
 ##' Fit biodiversity model 
 ##' @param data A data set in same format as the species data set supplied with this package 
-##' @param conf A code identifying the model configuration (now only one is possible) 
+##' @param conf A code identifying the model configuration (-2=constant model, -1=saturated model, 1=Neutral, 2=Best, 3=Latitude, and 4=Metabolic)
+##' @param fixK optionally a value used to fix the k parameter.
 ##' @param run if FALSE return AD object without running the optimization
 ##' @param ... extra arguments to MakeADFun
 ##' @return an object of class \code{biodiv}
@@ -12,7 +13,7 @@
 ##' @examples
 ##' data(species)
 ##' fit <- biodiv(species, conf=1)
-biodiv <- function(data, conf, run=TRUE, ...){
+biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
   dat<-data[(data$density*data$asurv)>1.0e-6,]
   data <- list()
   data$code <- conf
@@ -27,50 +28,79 @@ biodiv <- function(data, conf, run=TRUE, ...){
   data$mesh <- dat$mesh
   data$siz <- dat$siz
   data$depth <- dat$depth
-  data$density <- dat$density  
-
+  data$density <- dat$density
   param <- list()
+  if(data$code==(-2)){
+    param$loga7 <- 14
+    param$logk <- 3
+  }
+  if(data$code==(-1)){   
+    param$logb5 <- rep(-1,length(data$nsp))
+    param$logk <- 3
+  }
   if(data$code==1){
-    param$b5<- rep(-.5,length(unique(data$cat)))
+    param$b5 <- rep(-.5,length(unique(data$cat)))
     param$b0 <- 20
     param$b1 <- -0.1
     param$b2 <- 0.4
     param$logb3 <- 1
     param$b4 <- 0.2
-    param$logk<-3
-    param$dummy<-0
+    param$logk <- 5
+    param$dummy <- 0
   }
   if(data$code==2){
-    param$logb5<- rep(-1,length(data$nsp))
+    param$loga7 <- 20
+    param$b8 <- rep(0,length(unique(data$cat)))
+    param$logb1 <- -1
+    param$logb2 <- -5
+    param$logb3 <- -6
+    param$logb5 <- -6
+    param$logb6 <- -6
+    param$logb7 <- 1
+    param$logk <-1
   }
   if(data$code==3){
     param$loga7 <- -2
-    param$b5<- rep(0,length(unique(data$cat)))
+    param$b5 <- rep(0,length(unique(data$cat)))
     param$b0 <- 0
     param$b1 <- 0
     param$b2 <- 0
     param$b4 <- 0.1
-    param$logk<-0
+    param$logk <- 0
   }
   if(data$code==4){
     param$loga7 <- 16
-    param$b5<- rep(0,length(unique(data$cat)))
+    param$b5 <- rep(0,length(unique(data$cat)))
     param$logb1 <- -1
     param$logb2 <- -1
     param$logb3 <- -1
     param$logb4 <- 0.1
-    param$logk<-1
+    param$logk <- 1
+  }
+
+  mymap=list()
+  if(!missing(fixK)){
+    mymap$logk=factor(NA)
+    param$logk=log(fixK)
   }
   
-  obj <- MakeADFun(data, param, DLL="biodiversity", silent=TRUE)
+  obj <- MakeADFun(data, param, DLL="biodiversity", map=mymap, silent=TRUE)
   
   low <- rep(-Inf,length(obj$par))
   hig <- rep(Inf,length(obj$par))
+  if(data$code==(-2)){
+    low <- c(-100, -Inf)
+    hig <- c(100, Inf)
+  }  
+  if(data$code==(-1)){
+  }
   if(data$code==1){
     low <- c(-10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -Inf, -Inf, -Inf, -100, 0, -100)
     hig <- c(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, Inf, Inf, Inf, 100, Inf, 100)
   }
   if(data$code==2){
+    low <- c(-Inf, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -Inf, -Inf, -Inf, -Inf, -Inf, -10, -100)
+    hig <- c(Inf, 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10, Inf, Inf,  Inf,  Inf,  Inf, 10,  100)
   }
   if(data$code==3){
     low <- c(-Inf,-10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10,-Inf, -Inf, -1, -100)
