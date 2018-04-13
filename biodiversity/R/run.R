@@ -14,6 +14,7 @@
 ##' data(species)
 ##' fit <- biodiv(species, conf=1)
 biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
+  origdata<-data
   #dat<-data[(data$density*data$asurv)>1.0e-6,]
   dat<-data  
   data <- list()
@@ -115,7 +116,31 @@ biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
   rep <- obj$report()
   sdrep <- sdreport(obj,opt$par)
   ret <- list(opt=opt, obj=obj, data=data, rep=rep, sdrep=sdrep)
+  attr(ret,"od")<-origdata
   class(ret)<-"biodiv"
   return(ret)
 }
+
+##' R2 of bioviv output
+##' @param fit as returned from the biodiv function 
+##' @return R2
+##' @details ...
+##' @export
+R2 <- function(fit, ...){
+  1-sum((fit$data$nsp-fit$rep$mu)^2)/sum((fit$data$nsp-mean(fit$data$nsp))^2)
+}
+
+
+##' Deviance fraction of bioviv output
+##' @param fit as returned from the biodiv function.
+##' @return 
+##' @details ...
+##' @export
+devi <- function(fit, ...){
+  fit0<-biodiv(attr(fit,"od"), conf=-2, fixK=exp(fit$opt$par["logk"]))
+  fits<-biodiv(attr(fit,"od"), conf=-1, fixK=exp(fit$opt$par["logk"]))
+  (1-(logLik(fit)-logLik(fits))/(logLik(fit0)-logLik(fits)))
+}
+
+
 
