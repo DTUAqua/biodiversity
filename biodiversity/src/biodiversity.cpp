@@ -54,7 +54,7 @@ Type objective_function<Type>::operator() ()
     
     for(int i=0; i<nobs; ++i){
       mu(i)=a(i)*nu(i)*
-        log(Type(1)-(b3*logb3/(1-b3))*(abund(i))/(a(i)*nu(i)))*
+        log(Type(1)-(b3*logb3/(1-b3))*(abund(i)+1.0e-12)/(a(i)*nu(i)))*
 	exp(b4*log(asampl(i)))*exp(b5(cat(i))*log(mesh(i)));
     }  
   }

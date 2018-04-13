@@ -32,8 +32,28 @@ coef.biodiv <- function(object, ...){
   ret <- object$sdrep$par.fixed
   attr(ret,"cov") <- object$sdrep$cov.fixed
   attr(ret,"sd") <- sqrt(diag(object$sdrep$cov.fixed))
+  attr(ret,"code") <- object$data$code
   class(ret)<-"biodivcoef"
   ret
+}
+
+##' Print biodivcoef object 
+##' @method print biodivcoef 
+##' @param  x ...
+##' @param  ... extra arguments
+##' @details ...
+##' @export
+print.biodivcoef<-function(x, ...){
+  trans <- cbind(c("loga", "beta0", "beta1", "beta2", "beta3", "beta4", "beta5", "beta6", "beta7", "beta8", "beta9", "beta10", "logkappa", "loglambda"),
+                 c("b0"  ,      NA,      NA,    "b2",      NA,      NA,      NA,      NA,    "b1",      NA,    "b4",     "b5",     "logk",     "logb3"),
+                c("loga7",      NA,      NA, "logb1", "logb6", "logb3", "logb2",      NA, "logb7",      NA, "logb5",     "b8",     "logk",          NA),
+                c("loga7",    "b2",    "b0",      NA,      NA,    "b4",      NA,      NA,    "b1",      NA,    "b4",     "b5",     "logk",          NA),
+                c("loga7",      NA,      NA, "logb1", "logb2",      NA,      NA, "logb3",      NA,      NA, "logb4",     "b5",     "logk",          NA))   
+  ret <- cbind(x,attr(x,"sd"))
+  colnames(ret)<-c("Estimate", "Sd")
+  rownames(ret)<-sapply(rownames(ret),function(xx){i<-grep(xx, trans[,attr(x,"code")+1]);ifelse(length(i)>0,trans[i,1],xx)})
+  o<-order(as.numeric(gsub("[^[:digit:]]", "", rownames(ret))))
+  print(ret[o,])
 }
 
 ##' Extract residuals from biodiv object 
