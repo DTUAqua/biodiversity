@@ -14,7 +14,8 @@
 ##' data(species)
 ##' fit <- biodiv(species, conf=1)
 biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
-  dat<-data[(data$density*data$asurv)>1.0e-6,]
+  #dat<-data[(data$density*data$asurv)>1.0e-6,]
+  dat<-data  
   data <- list()
   data$code <- conf
   data$lat <- dat$lat

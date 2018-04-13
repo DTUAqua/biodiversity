@@ -36,7 +36,7 @@ Type objective_function<Type>::operator() ()
     vector<Type> b5=exp(logb5);
     k=exp(logk);
     for(int i=0; i<nobs; ++i){
-      mu(i)=b5(i)+Type(1.0e-12);
+      mu(i)=b5(i);//+Type(1.0e-12);
     }
   }
   if(code==1){  
