@@ -89,6 +89,7 @@ Type objective_function<Type>::operator() ()
     PARAMETER(b0);
     PARAMETER(b1);
     PARAMETER(b2);
+    PARAMETER(b3);
     PARAMETER(b4);
     PARAMETER(logk);
 
@@ -98,7 +99,7 @@ Type objective_function<Type>::operator() ()
     k=exp(logk);
     for(int i=0; i<nobs; ++i){
       mu(i)=a7*a(i)*
-        pow(lat(i), b2)*pow(lon(i), b0)*
+        pow(lat(i), b2)*pow(lon(i), b0)*pow(depth(i),-b3)*
         pow(asampl(i),b4)*exp(b5(cat(i))*log(mesh(i)))+Type(1.0e-12);
     }
   }

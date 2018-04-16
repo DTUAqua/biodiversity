@@ -67,6 +67,7 @@ biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
     param$b0 <- 0
     param$b1 <- 0
     param$b2 <- 0
+    param$b3 <- 0.1
     param$b4 <- 0.1
     param$logk <- 0
   }
@@ -105,14 +106,17 @@ biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
     hig <- c(Inf, 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10, Inf, Inf,  Inf,  Inf,  Inf, 10,  100)
   }
   if(data$code==3){
-    low <- c(-Inf,-10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10,-Inf, -Inf, -1, -100)
-    hig <- c(Inf, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, Inf, Inf, 1, 100)
+    low <- c(-Inf,-10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10,-Inf, -Inf, -Inf, -1, -100)
+    hig <- c(Inf, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, Inf, Inf, Inf, 1, 100)
   }
   if(data$code==4){
     low <- c(0, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10,-10, -Inf, -10, -100)
     hig <- c(Inf, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2, 10, 10, 10, 100)
   }
   opt <- nlminb(obj$par, obj$fn, obj$gr, lower=low, upper=hig, control=list(eval.max=10000, iter.max=10000))
+  if(opt$convergence!=0){ # try again 
+    opt <- nlminb(opt$par, obj$fn, obj$gr, lower=low, upper=hig, control=list(eval.max=10000, iter.max=10000))
+  }
   rep <- obj$report()
   sdrep <- sdreport(obj,opt$par)
   ret <- list(opt=opt, obj=obj, data=data, rep=rep, sdrep=sdrep)
@@ -139,7 +143,9 @@ R2 <- function(fit, ...){
 devi <- function(fit, ...){
   fit0<-biodiv(attr(fit,"od"), conf=-2, fixK=exp(fit$opt$par["logk"]))
   fits<-biodiv(attr(fit,"od"), conf=-1, fixK=exp(fit$opt$par["logk"]))
-  (1-(logLik(fit)-logLik(fits))/(logLik(fit0)-logLik(fits)))
+  D<-(1-(logLik(fit)-logLik(fits))/(logLik(fit0)-logLik(fits)))
+  attributes(D)<-NULL
+  D
 }
 
 

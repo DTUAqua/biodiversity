@@ -47,7 +47,7 @@ print.biodivcoef<-function(x, ...){
   trans <- cbind(c("loga", "beta0", "beta1", "beta2", "beta3", "beta4", "beta5", "beta6", "beta7", "beta8", "beta9", "beta10", "logkappa", "loglambda"),
                  c("b0"  ,      NA,      NA,    "b2",      NA,      NA,      NA,      NA,    "b1",      NA,    "b4",     "b5",     "logk",     "logb3"),
                 c("loga7",      NA,      NA, "logb1", "logb6", "logb3", "logb2",      NA, "logb7",      NA, "logb5",     "b8",     "logk",          NA),
-                c("loga7",    "b2",    "b0",      NA,      NA,    "b4",      NA,      NA,    "b1",      NA,    "b4",     "b5",     "logk",          NA),
+                c("loga7",    "b2",    "b0",      NA,      NA,    "b3",      NA,      NA,    "b1",      NA,    "b4",     "b5",     "logk",          NA),
                 c("loga7",      NA,      NA, "logb1", "logb2",      NA,      NA, "logb3",      NA,      NA, "logb4",     "b5",     "logk",          NA))   
   ret <- cbind(x,attr(x,"sd"))
   colnames(ret)<-c("Estimate", "Sd")
@@ -87,7 +87,13 @@ residuals.biodiv<-function(object, ...){
 ##' @details ...
 ##' @export
 plot.biodiv<-function(x, ...){
-  plot(x$rep$mu, x$data$nsp, xlab="Predicted number of species", ylab="Observed number of species")
+  colvec <- rgb(rbind(c(160,0,0),c(204,0,0),c(204,98,0),c(204,196,0),c(134,204,0),c(16,204,0),
+                    c(0,204,130),c(0,131,204),c(65,0,204),c(163,0,204),c(120,120,120)),
+              alpha=204,max=204)
+  palette(colvec)
+  plot(x$rep$mu, x$data$nsp, xlab="Predicted number of species", ylab="Observed number of species", , col=attr(fit,"od")$mlgr, pch=19, bty='L')
+  leg.txt<-c("3-6","6-9","9-16","16-26","26-43","43-70","70-116","116-191","191-314","314-518","518-854",">854")
+  legend("right",pch=19,col=colvec,cex=1,inset=c(-0.3,0),leg.txt,title="Max length" )
   abline(0,1)
 }
 
