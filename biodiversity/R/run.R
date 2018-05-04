@@ -45,21 +45,21 @@ biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
     param$b0 <- 20
     param$b1 <- -0.1
     param$b2 <- 0.4
-    param$logb3 <- 1
+    param$b3 <- exp(1)
     param$b4 <- 0.2
-    param$logk <- 5
+    param$logk <- 3
     param$dummy <- 0
   }
   if(data$code==2){
     param$loga7 <- 20
     param$b8 <- rep(0,length(unique(data$cat)))
-    param$logb1 <- -1
-    param$logb2 <- -5
-    param$logb3 <- -6
-    param$logb5 <- -6
-    param$logb6 <- -6
-    param$logb7 <- 1
-    param$logk <-1
+    param$b1 <- exp(-1)
+    param$b2 <- exp(-5)
+    param$b3 <- -exp(-6)
+    param$b5 <- exp(-6)
+    param$b6 <- exp(-6)
+    param$b7 <- -exp(1)
+    param$logk <- 4
   }
   if(data$code==3){
     param$loga7 <- -2
@@ -74,10 +74,10 @@ biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
   if(data$code==4){
     param$loga7 <- 16
     param$b5 <- rep(0,length(unique(data$cat)))
-    param$logb1 <- -1
-    param$logb2 <- -1
-    param$logb3 <- -1
-    param$logb4 <- 0.1
+    param$b1 <- exp(-1)
+    param$b2 <- exp(-1)
+    param$b3 <- exp(-1)
+    param$b4 <- exp(0.1)
     param$logk <- 1
   }
 
@@ -98,20 +98,20 @@ biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
   if(data$code==(-1)){
   }
   if(data$code==1){
-    low <- c(-10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -Inf, -Inf, -Inf, -100, 0, -100)
+    low <- c(-10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -Inf, -Inf, 0, -100, 0, -100)
     hig <- c(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, Inf, Inf, Inf, 100, Inf, 100)
   }
   if(data$code==2){
-    low <- c(-Inf, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -Inf, -Inf, -Inf, -Inf, -Inf, -10, -100)
-    hig <- c(Inf, 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10, Inf, Inf,  Inf,  Inf,  Inf, 10,  100)
+    low <- c(-Inf, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, 0, 0, -Inf, 0, 0, -Inf, -100)
+    hig <- c(Inf, 10,  10,  10,  10,  10,  10,  10,  10,  10,  10,  10, Inf, Inf,  0,  Inf,  Inf, 0,  100)
   }
   if(data$code==3){
     low <- c(-Inf,-10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10,-Inf, -Inf, -Inf, -1, -100)
     hig <- c(Inf, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, Inf, Inf, Inf, 1, 100)
   }
   if(data$code==4){
-    low <- c(0, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10,-10, -Inf, -10, -100)
-    hig <- c(Inf, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 2, 10, 10, 10, 100)
+    low <- c(0, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -10, -Inf,-Inf, -Inf, -Inf, -100)
+    hig <- c(Inf, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, Inf, Inf, Inf, Inf, 100)
   }
   opt <- nlminb(obj$par, obj$fn, obj$gr, lower=low, upper=hig, control=list(eval.max=10000, iter.max=10000))
   if(opt$convergence!=0){ # try again 

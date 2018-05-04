@@ -44,12 +44,12 @@ Type objective_function<Type>::operator() ()
     PARAMETER(b0);
     PARAMETER(b1);
     PARAMETER(b2);
-    PARAMETER(logb3);
+    PARAMETER(b3);
     PARAMETER(b4);
     PARAMETER(logk);
     vector<Type> a=exp(b0+b1*siz*siz);
     vector<Type> nu=exp(-b2/temp);
-    Type b3=exp(logb3);
+    Type logb3=log(b3);
     k=exp(logk);
     
     for(int i=0; i<nobs; ++i){
@@ -61,21 +61,15 @@ Type objective_function<Type>::operator() ()
   if(code==2){
     PARAMETER(loga7);
     PARAMETER_VECTOR(b8);
-    PARAMETER(logb1);
-    PARAMETER(logb2);
-    PARAMETER(logb3);
-    PARAMETER(logb5);
-    PARAMETER(logb6);
-    PARAMETER(logb7);
+    PARAMETER(b1);
+    PARAMETER(b2);
+    PARAMETER(b3);
+    PARAMETER(b5);
+    PARAMETER(b6);
+    PARAMETER(b7);
     PARAMETER(logk);
-    Type b1=exp(logb1);
-    Type b2=exp(logb2);
-    Type b3=-exp(logb3);
-    Type b5=exp(logb5);
-    Type b6=exp(logb6);
-    Type b7=exp(logb7);
     k=exp(logk);
-    vector<Type> a=exp(loga7-b7*siz*siz);
+    vector<Type> a=exp(loga7+b7*siz*siz);
     vector<Type> nu=exp(-b1/temp); 
     for(int i=0; i<nobs; ++i){
       mu(i)=a(i)*nu(i)*
@@ -106,17 +100,13 @@ Type objective_function<Type>::operator() ()
   if(code==4){    
     PARAMETER(loga7);
     PARAMETER_VECTOR(b5);
-    PARAMETER(logb1);
-    PARAMETER(logb2);
-    PARAMETER(logb3);
-    PARAMETER(logb4);
+    PARAMETER(b1);
+    PARAMETER(b2);
+    PARAMETER(b3);
+    PARAMETER(b4);
     PARAMETER(logk);
 
     Type a7=exp(loga7);
-    Type b1=exp(logb1);
-    Type b2=exp(logb2);
-    Type b3=exp(logb3);
-    Type b4=exp(logb4);
     k=exp(logk);
   
     vector<Type> nu=exp(-b1/temp);
