@@ -128,7 +128,7 @@ biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
 ##' R2 of bioviv output
 ##' @param fit as returned from the biodiv function 
 ##' @return R2
-##' @details ...
+##' @details Calculates R-squared coefficient of determination as: 1-SS(model residuals)/SS(total residuals)
 ##' @export
 R2 <- function(fit, ...){
   1-sum((fit$data$nsp-fit$rep$mu)^2)/sum((fit$data$nsp-mean(fit$data$nsp))^2)
@@ -138,7 +138,7 @@ R2 <- function(fit, ...){
 ##' Deviance fraction of bioviv output
 ##' @param fit as returned from the biodiv function.
 ##' @return 
-##' @details ...
+##' @details Deviance fraction calculated by comparing the deviance between the estimated model (M) and the saturated model (S) to the deviance between the constant model(C) and the saturated model (S). The constant and saturated models are optimized with same overdispersion parameter as the estimated model. The deviance fraction is defined as: D = 1-(logLik(M)-logLik(S))/(logLik(C)-logLik(S))
 ##' @export
 devi <- function(fit, ...){
   fit0<-biodiv(attr(fit,"od"), conf=-2, fixK=exp(fit$opt$par["logk"]))
