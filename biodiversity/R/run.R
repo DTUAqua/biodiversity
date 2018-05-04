@@ -67,7 +67,7 @@ biodiv <- function(data, conf, fixK=NULL, run=TRUE, ...){
     param$b0 <- 0
     param$b1 <- 0
     param$b2 <- 0
-    param$b3 <- 0.1
+    param$b3 <- -0.1
     param$b4 <- 0.1
     param$logk <- 0
   }
