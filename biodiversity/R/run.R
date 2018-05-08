@@ -134,11 +134,10 @@ R2 <- function(fit, ...){
   1-sum((fit$data$nsp-fit$rep$mu)^2)/sum((fit$data$nsp-mean(fit$data$nsp))^2)
 }
 
-
 ##' Deviance fraction of bioviv output
 ##' @param fit as returned from the biodiv function.
-##' @return 
-##' @details Deviance fraction calculated by comparing the deviance between the estimated model (M) and the saturated model (S) to the deviance between the constant model(C) and the saturated model (S). The constant and saturated models are optimized with same overdispersion parameter as the estimated model. The deviance fraction is defined as: D = 1-(logLik(M)-logLik(S))/(logLik(C)-logLik(S))
+##' @return deviance fraction (see details)
+##' @details Deviance fraction calculated by comparing the deviance between the estimated model (M) and the saturated model (S) to the deviance between the constant model(C) and the saturated model (S). The constant and saturated models are optimized with same overdispersion parameter as the estimated model. The deviance fraction is defined as: 1-(logLik(M)-logLik(S))/(logLik(C)-logLik(S))
 ##' @export
 devi <- function(fit, ...){
   fit0<-biodiv(attr(fit,"od"), conf=-2, fixK=exp(fit$opt$par["logk"]))
@@ -148,5 +147,48 @@ devi <- function(fit, ...){
   D
 }
 
+##' Re-run a model without a given covariate  
+##' @param fit as returned from the biodiv function.
+##' @param what quoted name of covariate to exclude (done by assigning it to its average value) 
+##' @return The fraction that the average variance is reduced by including the named covariate 
+##' @importFrom TMB MakeADFun sdreport
+##' @importFrom stats nlminb
+##' @useDynLib biodiversity
+runwithout<-function(fit, what){
+  data2<-fit$data
+  param2<- as.list(fit$sdrep, "Est")
+  data2[[what]]<-rep(mean(data2[[what]]), length(data2[[what]]))
+  if(what=="siz"){
+    data2[["cat"]][] <- 0
+  }
+  obj2 <- MakeADFun(data2, param2, DLL = "biodiversity", silent = TRUE)
+  opt2 <- nlminb(obj2$par, obj2$fn, obj2$gr, control=list(eval.max=10000, iter.max=10000))
+  frac = (mean(obj2$report()$var) - mean(fit$obj$report()$var)) / mean(obj2$report()$var)
+  frac
+}
 
-
+##' Variance reduction by each term 
+##' @param fit as returned from the biodiv function.
+##' @param lookat a vector of quoted covariate names to be looked at 
+##' @return A vector of variance reduction fractions 
+##' @export 
+##' @examples 
+##' order<-c(2,4,1,3)
+##' fits <- lapply(order, function(i)biodiv(species,i))
+##' cols <- lapply(fits, function(fit){vr<-varianceReduction(fit); d<-devi(fit); c(vr/sum(vr,na.rm=TRUE)*d,unexplained=1-d)})
+##' bars <- do.call(cbind, cols)
+##' colnames(bars) <- c("Neutral", "Best", "Latitude", "Metabolic")[order]
+##' par(mar=c(3,4,1,9)+0.5,oma=c(0,0,0,3), ask=FALSE)
+##' colvec <- rgb(rbind(c(105,0,0),c(204,0,0),c(204,98,0),c(204,196,0),c(140,204,140),
+##'           c(0,204,130),c(0,131,204),c(65,0,204),c(163,0,204),
+##'           c(120,120,120)),alpha=204,max=204)
+##' op <- palette(colvec)
+##' barplot(bars,col=c(op,"white"),names.arg=colnames(bars),
+##'       legend.text=rownames(bars),ylab="Proportion of deviance",
+##'         args.legend=list(x=7.5,y=1.05,bty="n"))
+##' 
+varianceReduction<-function(fit, lookat=c("siz", "temp", "asampl", "mesh", "density", "npp", "depth", "abund", "lat", "lon")){
+  vr <- sapply(lookat, function(x)runwithout(fit,x))
+  vr[vr<1.0e-6] <- 0
+  vr
+}
