@@ -87,9 +87,9 @@ residuals.biodiv<-function(object, ...){
 ##' @details ...
 ##' @export
 plot.biodiv<-function(x, ...){
-  colvec <- rgb(rbind(c(160,0,0),c(204,0,0),c(204,98,0),c(204,196,0),c(134,204,0),c(16,204,0),
-                    c(0,204,130),c(0,131,204),c(65,0,204),c(163,0,204),c(120,120,120)),
-              alpha=204,max=204)
+  colvec <- rgb(rbind(c(105,0,0),c(204,0,0),c(204,98,0),c(204,196,0),c(140,204,140),
+                      c(0,204,130),c(0,131,204),c(65,0,204),c(163,0,204),c(120,120,120)),
+                alpha=204,max=204)
   palette(colvec)
   plot(x$rep$mu, x$data$nsp, xlab="Predicted number of species", ylab="Observed number of species", , col=attr(fit,"od")$mlgr, pch=19, bty='L')
   leg.txt<-c("3-6","6-9","9-16","16-26","26-43","43-70","70-116","116-191","191-314","314-518","518-854",">854")

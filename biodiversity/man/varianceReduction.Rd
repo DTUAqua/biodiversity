@@ -25,9 +25,9 @@ cols <- lapply(fits, function(fit){vr<-varianceReduction(fit); d<-devi(fit); c(v
 bars <- do.call(cbind, cols)
 colnames(bars) <- c("Neutral", "Best", "Latitude", "Metabolic")[order]
 par(mar=c(3,4,1,9)+0.5,oma=c(0,0,0,3), ask=FALSE)
-colvec <- rgb(rbind(c(105,0,0),c(204,0,0),c(204,98,0),c(204,196,0),c(140,204,140),
-          c(0,204,130),c(0,131,204),c(65,0,204),c(163,0,204),
-          c(120,120,120)),alpha=204,max=204)
+colvec <- rgb(rbind(c(105,0,0),c(204,0,0),c(204,98,0),c(204,196,0),
+                    c(0,204,130),c(140,204,204),c(0,131,204),c(65,0,204),c(163,0,204),
+                    c(120,120,120)),alpha=204,max=204)
 op <- palette(colvec)
 barplot(bars,col=c(op,"white"),names.arg=colnames(bars),
       legend.text=rownames(bars),ylab="Proportion of deviance",
