@@ -1,0 +1,12 @@
+Package: biodiversity
+Title: Biodiversity assessment 
+Version: 0.0.1
+Date: 2018-02-27
+Authors@R: c(person("Henrik","Gislason",role=c("aut","cre"), email="hg@aqua.dtu.dk"), person("Anders","Nielsen",role="aut"))
+Description: Biodiversity assessment tool and providing data set describing ...
+License: GPL-2
+Imports: TMB
+LinkingTo: TMB, RcppEigen
+LazyData: TRUE
+BugReports: https://github.com/DTUAqua/biodiversity/issues
+RoxygenNote: 6.1.1
