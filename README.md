@@ -16,7 +16,7 @@ To install the package from the password protected github site require the devto
 After this the biodiversity package can be installed via the line: 
 
 ```R
- devtools::install_github("DTUAqua/biodiversity/biodiversity", auth_token="41e59f73cfe7b855dd61b39db125b79cb235d9d7")
+ devtools::install_github("DTUAqua/biodiversity/biodiversity")
 ```
 
 The package contain all needed data and functions to run the different models - these are documented in the package. E.g. to run the metabolic model type in R: 
