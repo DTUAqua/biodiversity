@@ -30,6 +30,3 @@ The package contain all needed data and functions to run the different models - 
 ```
 
 Here the last line will result in a table of the model parameter estimates. 
- 
-The authors of the package are available to answer any questions the reviewers may have. 
-
