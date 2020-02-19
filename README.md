@@ -30,3 +30,12 @@ The package contain all needed data and functions to run the different models - 
 ```
 
 Here the last line will result in a table of the model parameter estimates. 
+
+The results in table 1 of Gislason et al. (2020) can be easily reproduced via the script: 
+```R
+test/loglik/script.R
+```
+
+# Reference
+
+Gislason et al. 2020. Species richness in North Atlantic fish: Process concealed by pattern. Global Ecology and Biogeography. DOI: 10.1111/geb.13068
