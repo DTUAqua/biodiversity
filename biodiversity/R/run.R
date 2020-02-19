@@ -2,6 +2,8 @@
 ##' @param data A data set in same format as the species data set supplied with this package 
 ##' @param conf A code identifying the model configuration (-2=constant model, -1=saturated model, 1=Neutral, 2=Best, 3=Latitude, and 4=Metabolic)
 ##' @param fixK optionally a value used to fix the k parameter.
+##' @param useTotCatch if TRUE use catch in bias correction term
+##' @param useAswept if TRUE use area swept in bias correction term
 ##' @param run if FALSE return AD object without running the optimization
 ##' @param ... extra arguments to MakeADFun
 ##' @return an object of class \code{biodiv}

@@ -14,6 +14,10 @@ biodiv(data, conf, fixK = NULL, useTotCatch = TRUE, useAswept = TRUE,
 
 \item{fixK}{optionally a value used to fix the k parameter.}
 
+\item{useTotCatch}{if TRUE use catch in bias correction term}
+
+\item{useAswept}{if TRUE use area swept in bias correction term}
+
 \item{run}{if FALSE return AD object without running the optimization}
 
 \item{...}{extra arguments to MakeADFun}
